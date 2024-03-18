@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рассчет стоимости</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url(фо.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+}
+    </style>
+</head>
+<body>
+    <h1>Общая стоимость</h1>
+    <table id="ticketTable">
+        <thead>
+            <tr>
+                <th>Откуда</th>
+                <th>Куда</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Итого</th>
+            </tr>
+        </thead>
+        <tbody id="ticketInfo">
+            <!-- Здесь будут отображаться данные о билетах -->
+        </tbody>
+    </table>
+
+    <script>
+        // Функция для получения сохраненных данных из локального хранилища
+        function getTicketsFromLocalStorage() {
+            const ticketsJSON = localStorage.getItem('tickets');
+            return JSON.parse(ticketsJSON);
+        }
+
+        // Получение сохраненных данных из локального хранилища на втором сайте
+        const savedTickets = getTicketsFromLocalStorage();
+
+        // Отображение данных в таблице
+        const ticketInfoContainer = document.getElementById('ticketInfo');
+        if (savedTickets && savedTickets.length > 0) {
+            savedTickets.forEach(ticket => {
+                const row = document.createElement('tr');
+                const total = ticket.price * ticket.quantity; // Вычисляем общую стоимость для данной строки
+                row.innerHTML = `
+                    <td>${ticket.origin}</td>
+                    <td>${ticket.destination}</td>
+                    <td>${ticket.price}</td>
+                    <td>${ticket.quantity}</td>
+                    <td>${total}</td> <!-- Общая стоимость для этой строки -->
+                `;
+                ticketInfoContainer.appendChild(row);
+            });
+        } else {
+            ticketInfoContainer.innerHTML = '<tr><td colspan="5">Нет сохраненных данных в локальном хранилище</td></tr>';
+        }
+    </script>
+</body>
+</html>
